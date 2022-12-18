@@ -1,0 +1,108 @@
+%ticket-data-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+$primary-width: 141px;
+$description-color: #a0b0b9;
+
+%description-data {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: $description-color;
+}
+
+%specific-data {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+%data-block {
+  display: flex;
+  flex-direction: column;
+  width: $primary-width;
+}
+
+// .ticketlist {
+// }
+
+.ticket {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 20px;
+  height: 184px;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin-bottom: 20px;
+
+  &__essentials {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  &__price {
+    // display: flex;
+    // justify-content: center;
+    // flex-direction: column;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 24px;
+
+    display: flex;
+    align-items: center;
+    color: #2196f3;
+  }
+
+  // &__logo {
+  // }
+
+  &__data {
+    @extend %ticket-data-wrap;
+    padding-bottom: 10px;
+  }
+
+  &__flight {
+    @extend %data-block;
+  }
+
+  &__path {
+    @extend %description-data;
+  }
+
+  &__time {
+    @extend %specific-data;
+  }
+
+  &__duration {
+    @extend %data-block;
+  }
+
+  &__inscription {
+    @extend %description-data;
+  }
+
+  &__length {
+    @extend %specific-data;
+  }
+
+  &__transit {
+    @extend %data-block;
+  }
+
+  &__count {
+    @extend %description-data;
+  }
+
+  &__location {
+    @extend %specific-data;
+  }
+}
