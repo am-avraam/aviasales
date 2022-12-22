@@ -8,7 +8,7 @@ Typescript + React + Redux.
 
 ## Ссылка на Vercel
 
-[Click](http://movie-app-am-avraam.vercel.app/ 'Come on')
+[Click](aviasales-bay-iota.vercel.app 'Come on')
 
 ### Функционал
 

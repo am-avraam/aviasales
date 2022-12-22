@@ -5,10 +5,10 @@ import { connect } from 'react-redux'
 import NoResMessage from '../../services/alert/alert'
 import Ticket, { TicketTypes } from '../ticket/ticket'
 import { searchInit as init, ticketsLoad as load } from '../../redux/actions'
-import Loading from '../../services/loading/loading'
-import { Box } from '../../redux/checkbox-reducer'
 import ShowMore from '../show-more/show-more'
 import { State } from '../../types'
+import Loading from '../../services/loading/loading'
+import { Box } from '../../redux/checkbox-reducer'
 
 import classes from './ticket-list.module.scss'
 
