@@ -1,153 +1,81 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+import uniqid from 'uniqid'
+import { connect } from 'react-redux'
 
-import S7 from '../../image/S7Logo.png'
+import NoResMessage from '../../services/alert/alert'
+import Ticket, { TicketTypes } from '../ticket/ticket'
+import { searchInit as init, ticketsLoad as load } from '../../redux/actions'
+import Loading from '../../services/loading/loading'
+import { Box } from '../../redux/checkbox-reducer'
+import ShowMore from '../show-more/show-more'
+import { State } from '../../types'
 
 import classes from './ticket-list.module.scss'
 
-const TicketList: React.FC = () => {
+type Properties = {
+  state: State
+  searchInit: () => void
+  ticketsLoad: (id: string) => void
+}
+
+const TicketList: React.FC<Properties> = ({ state, searchInit, ticketsLoad }) => {
+  const id = state.api.sessionID
+  const list = state.api.tickets
+  const { pagination } = state.loading
+
+  useEffect(() => {
+    searchInit()
+  }, [])
+
+  useEffect(() => {
+    if (!state.api.enough && id) {
+      ticketsLoad(id)
+    }
+  })
+
+  const transferCountChecked = state.checkbox.checkboxes.filter((box: Box) => box.checked)
+
+  let checkboxSign: number | number[]
+  if (transferCountChecked.length === 5) checkboxSign = -1
+  else if (transferCountChecked.length && transferCountChecked[0].name === 'Без пересадок') checkboxSign = 0
+  else checkboxSign = transferCountChecked.map((box: Box) => (Number.isInteger(+box.name[0]) ? +box.name[0] : 1000))
+
+  let ticketList
+  let showMoreVisible
+  if (list.length > 1) {
+    const listCounted = list.filter((ticket: TicketTypes) => {
+      return ticket.segments.some((flight) => {
+        if (!checkboxSign && !flight.stops.length) return true
+        if (checkboxSign === -1) return true
+        if (Array.isArray(checkboxSign) && checkboxSign.some((el) => el === flight.stops.length)) return true
+        return false
+      })
+    })
+    // const ticketListChecked = list.filter((ticket: TicketTypes) => ticket.visible)
+    ticketList = listCounted.slice(0, pagination).map((ticket: TicketTypes) => {
+      return <Ticket key={uniqid()} data={ticket} />
+    })
+
+    ticketList = listCounted.length ? ticketList : <NoResMessage />
+    showMoreVisible = listCounted.length > 5
+  }
   return (
-    <div className={classes.ticketlist}>
-      <div className={classes.ticket}>
-        <div className={classes.ticket__essentials}>
-          <span className={classes.ticket__price}>13 400 Р</span>
-          <img className={classes.ticket__logo} src={S7} alt="logo" />
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>10:45 - 08:00</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>21ч 15м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>2 пересадки</span>
-            <span className={classes.ticket__location}>HKG, JNB</span>
-          </div>
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>11:20 - 00:50</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>13ч 30м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>1 пересадка</span>
-            <span className={classes.ticket__location}>HKG</span>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.ticket}>
-        <div className={classes.ticket__essentials}>
-          <span className={classes.ticket__price}>13 400 Р</span>
-          <img className={classes.ticket__logo} src={S7} alt="logo" />
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>10:45 - 08:00</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>21ч 15м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>2 пересадки</span>
-            <span className={classes.ticket__location}>HKG, JNB</span>
-          </div>
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>11:20 - 00:50</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>13ч 30м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>1 пересадка</span>
-            <span className={classes.ticket__location}>HKG</span>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.ticket}>
-        <div className={classes.ticket__essentials}>
-          <span className={classes.ticket__price}>13 400 Р</span>
-          <img className={classes.ticket__logo} src={S7} alt="logo" />
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>10:45 - 08:00</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>21ч 15м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>2 пересадки</span>
-            <span className={classes.ticket__location}>HKG, JNB</span>
-          </div>
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>11:20 - 00:50</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>13ч 30м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>1 пересадка</span>
-            <span className={classes.ticket__location}>HKG</span>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.ticket}>
-        <div className={classes.ticket__essentials}>
-          <span className={classes.ticket__price}>13 400 Р</span>
-          <img className={classes.ticket__logo} src={S7} alt="logo" />
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>10:45 - 08:00</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>21ч 15м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>2 пересадки</span>
-            <span className={classes.ticket__location}>HKG, JNB</span>
-          </div>
-        </div>
-        <div className={classes.ticket__data}>
-          <div className={classes.ticket__flight}>
-            <span className={classes.ticket__path}>MOW - HKT</span>
-            <span className={classes.ticket__time}>11:20 - 00:50</span>
-          </div>
-          <div className={classes.ticket__duration}>
-            <span className={classes.ticket__inscription}>В пути</span>
-            <span className={classes.ticket__length}>13ч 30м</span>
-          </div>
-          <div className={classes.ticket__transit}>
-            <span className={classes.ticket__count}>1 пересадка</span>
-            <span className={classes.ticket__location}>HKG</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <div className={classes.ticketlist}>{ticketList || <Loading />}</div>
+      {showMoreVisible && <ShowMore />}
+    </>
   )
 }
 
-export default TicketList
+const mapStateToProperties = (state: State) => {
+  return {
+    state,
+  }
+}
+
+const mapDispatchToProperties = {
+  searchInit: init,
+  ticketsLoad: load,
+}
+
+export default connect(mapStateToProperties, mapDispatchToProperties)(TicketList)

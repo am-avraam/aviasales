@@ -1,14 +1,14 @@
-import React, { ChangeEventHandler, FormEventHandler } from 'react'
+import React, { ChangeEventHandler } from 'react'
 import { connect } from 'react-redux'
 
 import * as actions from '../../redux/actions'
+import { State } from '../../types'
 
 import classes from './filters.module.scss'
 
 type Properties = {
-  state: any
+  state: State
   checkFilter: ChangeEventHandler<HTMLInputElement>
-  // FormEventHandler<HTMLLabelElement>
 }
 
 type Filter = {
@@ -17,10 +17,11 @@ type Filter = {
 }
 
 const Filters: React.FC<Properties> = ({ state, checkFilter }) => {
-  const filtersMap = state.filters.map((filter: Filter, index: number) => {
+  const { filters } = state.filters
+
+  const filtersMap = filters.map((filter: Filter, index: number) => {
     const labelClasses = [classes.filters__label]
     if (filter.checked) labelClasses.push(classes.active)
-    console.log(labelClasses)
 
     return (
       <label className={labelClasses.join(' ')} key={index}>
@@ -37,51 +38,13 @@ const Filters: React.FC<Properties> = ({ state, checkFilter }) => {
     )
   })
 
-  return (
-    <div className={classes.filters}>
-      {filtersMap}
-      {/* // <label className={classes.filters__label}>
-  <input
-      //     onChange={checkFilter}
-      //     type="radio"
-      //     value="Самый дешевый"
-      //     name="choice"
-      //     className={classes.filters__input}
-      //     checked={state.filters[0]}
-      //   />
-      //   <span className={classes.filters__description}>Самый дешевый</span>
-      // </label>
-      // <label className={classes.filters__label}>
-      //   <input
-      //     onChange={checkFilter}
-      //     type="radio"
-      //     value="Самый быстрый"
-      //     name="choice"
-      //     className={classes.filters__input}
-      //     checked={state.filters[1]}
-      //   />
-      //   <span className={classes.filters__description}>Самый быстрый</span>
-      // </label>
-      // <label className={classes.filters__label}>
-      //   <input
-      //     onChange={checkFilter}
-      //     type="radio"
-      //     value="Оптимальный"
-      //     name="choice"
-      //     className={classes.filters__input}
-      //     checked={state.filters[2]}
-      //   />
-      //   <span className={classes.filters__description}>Оптимальный</span>
-      // </label> */}
-    </div>
-  )
+  return <div className={classes.filters}>{filtersMap}</div>
 }
 
-const mapStateToProperties = (state: object) => {
+const mapStateToProperties = (state: State) => {
   return {
     state,
   }
 }
 
 export default connect(mapStateToProperties, actions)(Filters)
-// Filters

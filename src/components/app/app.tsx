@@ -1,28 +1,51 @@
-// import { Component } from 'react'
-// import { Offline, Online } from 'react-detect-offline'
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
 import '../../styles'
+import { Dispatch } from 'react'
+
 import logo from '../../image/logo.png'
 import TransferCount from '../transfer-count/transfer-count'
 import Filters from '../filters/filters'
 import TicketList from '../ticket-list/ticket-list'
-import ShowMore from '../show-more/show-more'
+import Loading from '../../services/loading/loading'
+import SearchLoader from '../../services/searching'
+import { loaderDisplay as showLoad, loaderHide as hideLoad } from '../../redux/actions'
+import { State } from '../../types'
 
 import classes from './app.module.scss'
 
-const App: React.FC = () => {
+export type Properties = {
+  state: State
+  loaderDisplay: () => void
+  loaderHide: () => void
+}
+
+const App: React.FC<Properties> = ({ state, loaderDisplay, loaderHide }) => {
+  const { enough } = state.api
+
   return (
     <section className={classes.app}>
-      <img src={logo} alt="aviaslaves" className={classes.app__logo}></img>
+      {enough && <img src={logo} alt="aviaslaves" className={classes.app__logo}></img>}
+      {!enough && <SearchLoader />}
       <div className={classes.wrapper}>
         <TransferCount />
         <div className={classes.content}>
           <Filters />
           <TicketList />
-          <ShowMore />
         </div>
       </div>
     </section>
   )
 }
 
-export default App
+const mapStateToProperties = (state: State) => {
+  return {
+    state,
+  }
+}
+
+const mapDispatchToProperties = {
+  loaderDisplay: hideLoad,
+  loaderHide: showLoad,
+}
+
+export default connect(mapStateToProperties, mapDispatchToProperties)(App)

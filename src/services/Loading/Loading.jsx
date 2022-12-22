@@ -1,5 +1,8 @@
 import { Spin } from 'antd'
-import './Loading.css'
 
-const Loading = () => <Spin size="large" />
+import './loading.css'
+
+const Loading = () => {
+  return <Spin size="large" />
+}
 export default Loading

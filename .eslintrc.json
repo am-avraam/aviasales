@@ -8,7 +8,6 @@
   "extends": [
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
-    "plugin:unicorn/recommended",
     "plugin:prettier/recommended",
     "prettier",
     // "prettier/@typescript-eslint",
@@ -38,13 +37,19 @@
     ],
     "no-unused-vars": 0,
     "@typescript-eslint/no-unused-vars": 0,
+    
+    "react/jsx-indent-props": ["error", 2],
+    "react/jsx-indent": ["error", 2],
     "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],
+    "no-nested-ternary": "off",
+    "multiline-ternary": ["error", "always-multiline"],
     "semi": ["error", "never"],
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
     "import/extensions": "off",
+    "default-param-last": "off",
     "import/no-unresolved": [2, { "caseSensitive": false }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx", "ts"] }],
     "import/order": [
