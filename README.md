@@ -8,7 +8,7 @@ Typescript + React + Redux.
 
 ## Ссылка на Vercel
 
-[Click](aviasales-bay-iota.vercel.app 'Come on')
+[Click](https://aviasales-bay-iota.vercel.app/ 'Come on')
 
 ### Функционал
 
