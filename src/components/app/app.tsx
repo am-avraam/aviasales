@@ -1,36 +1,46 @@
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux'
+import { connect } from 'react-redux'
 import '../../styles'
-import { Dispatch } from 'react'
+import { useEffect, useState } from 'react'
 
-import logo from '../../image/logo.png'
-import TransferCount from '../transfer-count/transfer-count'
-import Filters from '../filters/filters'
-import TicketList from '../ticket-list/ticket-list'
-import Loading from '../../services/loading/loading'
-import SearchLoader from '../../services/searching'
-import { loaderDisplay as showLoad, loaderHide as hideLoad } from '../../redux/actions'
+import logo from '../../assets/images/logo.png'
+import TransferCount from '../TransferCount/TransferCount'
+import Filters from '../Filters/Filters'
+import TicketList from '../TicketList/TicketList'
+import SearchLoader from '../Searching'
+import { loaderDisplay as showLoad, loaderHide as hideLoad } from '../../redux/Actions'
 import { State } from '../../types'
+import { useGetTicketListQuery, useLazyGetTicketListQuery } from '../../services/ListService'
+import useActions from '../../hooks/actions'
+import { useAppSelector } from '../../hooks/redux'
 
-import classes from './app.module.scss'
+import classes from './App.module.scss'
 
 export type Properties = {
   state: State
-  loaderDisplay: () => void
-  loaderHide: () => void
 }
 
-const App: React.FC<Properties> = ({ state, loaderDisplay, loaderHide }) => {
-  const { enough } = state.api
+const App: React.FC = () => {
+  const { tickets, searchId, enough } = useAppSelector((state) => state.loading)
+
+  const [refetch, { isSuccess: succeed, isError: errored }] = useLazyGetTicketListQuery()
+
+  useEffect(() => {
+    if (!searchId || (!searchId && errored)) refetch('')
+    if (!enough && searchId) {
+      refetch(searchId)
+    }
+  }, [tickets.length, succeed, errored])
+
+  const header = enough ? <img src={logo} alt="aviaslaves" className={classes.app__logo}></img> : <SearchLoader />
 
   return (
     <section className={classes.app}>
-      {enough && <img src={logo} alt="aviaslaves" className={classes.app__logo}></img>}
-      {!enough && <SearchLoader />}
+      {header}
       <div className={classes.wrapper}>
         <TransferCount />
         <div className={classes.content}>
-          <Filters />
-          <TicketList />
+          {/* <Filters />
+          <TicketList /> */}
         </div>
       </div>
     </section>
@@ -43,9 +53,4 @@ const mapStateToProperties = (state: State) => {
   }
 }
 
-const mapDispatchToProperties = {
-  loaderDisplay: hideLoad,
-  loaderHide: showLoad,
-}
-
-export default connect(mapStateToProperties, mapDispatchToProperties)(App)
+export default App

@@ -1,6 +1,6 @@
 import { Spin } from 'antd'
 
-import './loading.css'
+import './Loading.css'
 
 const Loading: React.FC = () => {
   return <Spin size="large" />

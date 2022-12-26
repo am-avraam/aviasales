@@ -47,6 +47,8 @@
     "multiline-ternary": ["error", "always-multiline"],
     "semi": ["error", "never"],
     "react/react-in-jsx-scope": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["off"],
     "react/prop-types": 0,
     "import/extensions": "off",
     "default-param-last": "off",

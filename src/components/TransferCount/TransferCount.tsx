@@ -1,12 +1,12 @@
-import React, { ChangeEventHandler, useState } from 'react'
+import React, { ChangeEventHandler } from 'react'
 import { connect } from 'react-redux'
 import uniqid from 'uniqid'
 
-import * as actions from '../../redux/actions'
-import { Box } from '../../redux/checkbox-reducer'
+import * as actions from '../../redux/Actions'
+import { Box } from '../../redux/CheckboxReducer'
 import { State } from '../../types'
 
-import classes from './transfer-count.module.scss'
+import classes from './TransferCount.module.scss'
 
 type Properties = {
   state: State

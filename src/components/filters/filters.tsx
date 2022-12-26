@@ -1,10 +1,10 @@
 import React, { ChangeEventHandler } from 'react'
 import { connect } from 'react-redux'
 
-import * as actions from '../../redux/actions'
+import * as actions from '../../redux/Actions'
 import { State } from '../../types'
 
-import classes from './filters.module.scss'
+import classes from './Filters.module.scss'
 
 type Properties = {
   state: State

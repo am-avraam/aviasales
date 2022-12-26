@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Space } from 'antd'
 import { useDispatch, connect } from 'react-redux'
-import { AnyAction } from 'redux'
 
-import { showMore } from '../../redux/actions'
+import { showMore } from '../../redux/Actions'
 import { State } from '../../types'
 
-import classes from './show-more.module.scss'
+import classes from './ShowMore.module.scss'
 
 type ShowMoreProps = {
   state: State

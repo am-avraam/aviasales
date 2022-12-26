@@ -1,6 +1,10 @@
+import { createSlice } from '@reduxjs/toolkit'
+
+import { A } from './Actions'
+
 interface Action {
   type: string
-  name: string
+  payload: string
 }
 
 export interface Filter {
@@ -18,27 +22,24 @@ const initialState = {
     { name: 'Самый быстрый', checked: false },
     { name: 'Оптимальный', checked: false },
   ],
-}
+} as FilterState
 
-const filterReducer = (state: FilterState = initialState, action: Action) => {
-  switch (action.type) {
-    case 'CHECK_FILTER': {
-      const newFilters = state.filters.map((element: Filter) => {
-        if (element.name === action.name) {
+export const filterSlice = createSlice({
+  name: 'filters',
+  initialState,
+  reducers: {
+    [A.CHECK_FILTER]: (state, action: Action) => {
+      const newFilters: Filter[] = state.filters.map((element: Filter) => {
+        if (element.name === action.payload) {
           const newElement = { ...element, checked: !element.checked }
           return newElement
         }
         return { ...element, checked: false }
       })
-      // console.log(state.filters)
 
       return { ...state, filters: newFilters }
-    }
+    },
+  },
+})
 
-    default: {
-      return state
-    }
-  }
-}
-
-export default filterReducer
+export default filterSlice.reducer

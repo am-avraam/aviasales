@@ -1,4 +1,6 @@
 /* eslint-disable default-param-last */
+import { A } from './Actions'
+
 interface Action {
   type: string
   name: string
@@ -38,7 +40,6 @@ const initialState: State = {
 const toggleAll = (element: Box, index: number, array: Box[]) => {
   const newSign = array[0].checked
   const newElement = { ...element, checked: !newSign }
-  // newElement = { ...newElement, checked: !newElement.checked }
   return newElement
 }
 
@@ -73,7 +74,7 @@ const toggleAddition = (array: Box[]) => {
 
 const reducer = (state: State = initialState, action: Action) => {
   switch (action.type) {
-    case 'TOGGLE': {
+    case A.TOGGLE: {
       const newBoxes = state.checkboxes.map((element): Box => {
         if (element.name === action.name) {
           const newElement = { ...element, checked: !element.checked }
@@ -85,13 +86,13 @@ const reducer = (state: State = initialState, action: Action) => {
       return { ...state, checkboxes: toggleAddition(newBoxes) }
     }
 
-    case 'ALL_IN': {
+    case A.ALL_IN: {
       const newBoxes = state.checkboxes.map(toggleAll)
 
       return { ...state, checkboxes: newBoxes }
     }
 
-    case 'CHECK_FILTER': {
+    case A.CHECK_FILTER: {
       const newFilters = state.filters.map((element: Filter) => {
         if (element.name === action.name) {
           const newElement = { ...element, checked: !element.checked }

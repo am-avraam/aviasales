@@ -1,12 +1,15 @@
+import { createSlice } from '@reduxjs/toolkit'
+
+import { A } from './Actions'
+
 interface Action {
   type: string
-  name: string
+  payload: string
 }
 
 export interface Box {
   name: string
   checked: boolean
-  // index: number
 }
 
 export type CheckboxState = {
@@ -57,14 +60,15 @@ const initialState = {
     { name: '2 пересадки', checked: true },
     { name: '3 пересадки', checked: false },
   ],
-}
+} as CheckboxState
 
-const checkboxReducer = (state: CheckboxState = initialState, action: Action) => {
-  switch (action.type) {
-    case 'TOGGLE': {
-      const newBoxes = state.checkboxes.map((element): Box => {
-        if (element.name === action.name) {
-          // console.log(state)
+export const checkboxSlice = createSlice({
+  name: 'checkbox',
+  initialState,
+  reducers: {
+    [A.TOGGLE]: (state, action: Action) => {
+      const newBoxes = state.checkboxes.map((element: Box): Box => {
+        if (element.name === action.payload) {
           const newElement = { ...element, checked: !element.checked }
           return newElement
         }
@@ -72,18 +76,13 @@ const checkboxReducer = (state: CheckboxState = initialState, action: Action) =>
       })
 
       return { ...state, checkboxes: toggleAddition(newBoxes) }
-    }
+    },
 
-    case 'ALL_IN': {
+    [A.ALL_IN]: (state) => {
       const newBoxes = state.checkboxes.map(toggleAll)
-
       return { ...state, checkboxes: newBoxes }
-    }
+    },
+  },
+})
 
-    default: {
-      return state
-    }
-  }
-}
-
-export default checkboxReducer
+export default checkboxSlice.reducer
