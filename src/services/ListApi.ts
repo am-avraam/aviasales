@@ -24,11 +24,9 @@ export const ticketsAPI = createApi({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
         let id = ''
         if (!_arg) {
-          console.log('ЧТО ЗА НАХУЙ??')
-
           let sessionId = await fetchWithBQ('/search')
           if (sessionId.error) sessionId = await fetchWithBQ('/search')
-          // if (sessionId.error) return { error: sessionId.error as FetchBaseQueryError }
+
           const response = sessionId.data as InitResp
           id = response.searchId
         } else id = _arg
@@ -37,19 +35,9 @@ export const ticketsAPI = createApi({
 
         return result.data ? { data: [id, result.data] as CombineResp } : { error: result.error as FetchBaseQueryError }
       },
-
-      // result.error as FetchBaseQueryError
-
-      // getSessionID: build.query<InitResp, void>({
-      //   query: () => '/search',
-      // }),
-      // getList: build.query<ListResp, string>({
-      //   query: (id) => ({
-      //     url: `/tickets?searchId=${id}`,
-      //   }),
     }),
   }),
 })
 
 export const { useGetTicketListQuery, useLazyGetTicketListQuery } = ticketsAPI
-// useGetSessionIDQuery, useGetListQuery,
+export type TicketsAPIState = ReturnType<typeof ticketsAPI.reducer>

@@ -1,10 +1,11 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 
-import { A } from './Actions'
+import { ticketsAPI } from '../services/ListApi'
 
 interface Action {
   type: string
-  payload: string
+  payload: React.ChangeEvent<HTMLInputElement>
 }
 
 export interface Filter {
@@ -28,18 +29,22 @@ export const filterSlice = createSlice({
   name: 'filters',
   initialState,
   reducers: {
-    [A.CHECK_FILTER]: (state, action: Action) => {
-      const newFilters: Filter[] = state.filters.map((element: Filter) => {
-        if (element.name === action.payload) {
+    checkFilter: (state: FilterState, action: Action) => {
+      state.filters = state.filters.map((element: Filter) => {
+        if (element.name === action.payload.target.value) {
           const newElement = { ...element, checked: !element.checked }
           return newElement
         }
         return { ...element, checked: false }
       })
-
-      return { ...state, filters: newFilters }
     },
   },
+  // extraReducers: (builder) => {
+  //   builder.addMatcher(ticketsAPI.endpoints.getTicketList.matchFulfilled, (state, { payload: result }) => {
+  //     state.filters = [...state.filters]
+  //   })
+  // },
 })
 
 export default filterSlice.reducer
+export const filterActions = filterSlice.actions

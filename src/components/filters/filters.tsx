@@ -1,14 +1,14 @@
-import React, { ChangeEventHandler } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
-import * as actions from '../../redux/Actions'
-import { State } from '../../types'
+import { useAppSelector } from '../../hooks/redux'
+import useActions from '../../hooks/actions'
+import { State } from '../../models/stateTypes'
 
 import classes from './Filters.module.scss'
 
 type Properties = {
   state: State
-  checkFilter: ChangeEventHandler<HTMLInputElement>
 }
 
 type Filter = {
@@ -16,8 +16,9 @@ type Filter = {
   checked: boolean
 }
 
-const Filters: React.FC<Properties> = ({ state, checkFilter }) => {
-  const { filters } = state.filters
+const Filters: React.FC = () => {
+  const { filters } = useAppSelector((state) => state.filters)
+  const { checkFilter } = useActions()
 
   const filtersMap = filters.map((filter: Filter, index: number) => {
     const labelClasses = [classes.filters__label]
@@ -41,10 +42,4 @@ const Filters: React.FC<Properties> = ({ state, checkFilter }) => {
   return <div className={classes.filters}>{filtersMap}</div>
 }
 
-const mapStateToProperties = (state: State) => {
-  return {
-    state,
-  }
-}
-
-export default connect(mapStateToProperties, actions)(Filters)
+export default Filters

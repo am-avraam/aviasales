@@ -1,11 +1,10 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 
-import { ticketsAPI } from '../services/ListService'
+import { ticketsAPI } from '../services/ListApi'
 import { store } from '..'
 
 import checkboxReducer from './CheckboxReducer'
 import filterReducer from './FilterReducer'
-import sessionReducer from './SessionReducer'
 import appToolsReducer from './AppReducer'
 
 export const setupStore = () => {
@@ -13,8 +12,7 @@ export const setupStore = () => {
     reducer: {
       checkbox: checkboxReducer,
       filters: filterReducer,
-      // api: sessionReducer,
-      loading: appToolsReducer,
+      list: appToolsReducer,
 
       [ticketsAPI.reducerPath]: ticketsAPI.reducer,
     },
@@ -22,11 +20,6 @@ export const setupStore = () => {
       getDefaultMiddleware({
         serializableCheck: false,
       }).concat(ticketsAPI.middleware),
-    // middleware: (getDefaultMiddleware) {
-    //   return getDefaultMiddleware({
-    //     serializableCheck: false,
-    //   });
-    // },
   })
 }
 

@@ -3,13 +3,14 @@ import uniqid from 'uniqid'
 import Ticket from '../components/Ticket/Ticket'
 import { Box } from '../redux/CheckboxReducer'
 import NoResMessage from '../components/Alert/Alert'
-import { State } from '../types'
+import { State } from '../models/stateTypes'
 import { TicketTypes } from '../models/ITicket'
+import { ListState } from '../redux/AppReducer'
 
 const formatter = (
   filters: State['checkbox']['checkboxes'],
-  list: State['api']['tickets'],
-  pagination: State['loading']['pagination']
+  list: ListState['tickets'],
+  pagination: ListState['pagination']
 ) => {
   const transferCountChecked = filters.filter((box: Box) => box.checked)
 

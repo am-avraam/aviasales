@@ -1,7 +1,7 @@
-import { ApiState, Action } from '../redux/SessionReducer'
 import { TicketTypes } from '../models/ITicket'
+import { ListState } from '../redux/AppReducer'
 
-export const optimal = (arr: ApiState['tickets']) => {
+export const optimal = (arr: ListState['tickets']) => {
   const firstThird = arr.slice(0, Math.floor((arr.length * 1) / 3))
   const secondThird = arr.slice(Math.floor(arr.length / 3), Math.floor((arr.length * 2) / 3))
   const lastThird = arr.slice(Math.floor((arr.length * 2) / 3))
@@ -20,7 +20,7 @@ export const optimal = (arr: ApiState['tickets']) => {
   return result
 }
 
-export const filterList = (name: Action['name'], tickets: ApiState['tickets']) => {
+export const filterList = (name: string, tickets: ListState['tickets']) => {
   let sortedList: TicketTypes[] = []
   const cheepestList = [...tickets].sort((a, b) => a.price - b.price)
   const fastestList = [...tickets].sort((a, b) => {

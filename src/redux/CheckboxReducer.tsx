@@ -1,10 +1,11 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 
-import { A } from './Actions'
+import { toggleAddition, toggleAll } from '../services/CheckBoxCounter'
 
 interface Action {
   type: string
-  payload: string
+  payload: React.ChangeEvent<HTMLInputElement>
 }
 
 export interface Box {
@@ -14,42 +15,6 @@ export interface Box {
 
 export type CheckboxState = {
   checkboxes: Box[]
-}
-
-const toggleAll = (element: Box, index: number, array: Box[]) => {
-  const newSign = array[0].checked
-  const newElement = { ...element, checked: !newSign }
-
-  return newElement
-}
-
-const allInOff = (array: Box[]) => {
-  const newArray = array.map((element, index) => {
-    if (index === 0) {
-      const newElement: Box = { ...element, checked: !element.checked }
-      return newElement
-    }
-    return element
-  })
-  return newArray
-}
-
-const toggleAddition = (array: Box[]) => {
-  const countFilter = [...array].reduce((accum, item) => {
-    // eslint-disable-next-line no-param-reassign
-    if (item.checked) accum += 1
-    return accum
-  }, 0)
-
-  if (countFilter === 4 && !array[0].checked) {
-    const newArray = array.map(toggleAll)
-    return newArray
-  }
-  if (countFilter === 4) {
-    const newArray = allInOff(array)
-    return newArray
-  }
-  return array
 }
 
 const initialState = {
@@ -66,23 +31,22 @@ export const checkboxSlice = createSlice({
   name: 'checkbox',
   initialState,
   reducers: {
-    [A.TOGGLE]: (state, action: Action) => {
+    toggle: (state, action: Action) => {
       const newBoxes = state.checkboxes.map((element: Box): Box => {
-        if (element.name === action.payload) {
+        if (element.name === action.payload.target.value) {
           const newElement = { ...element, checked: !element.checked }
           return newElement
         }
         return element
       })
-
-      return { ...state, checkboxes: toggleAddition(newBoxes) }
+      state.checkboxes = toggleAddition(newBoxes)
     },
 
-    [A.ALL_IN]: (state) => {
-      const newBoxes = state.checkboxes.map(toggleAll)
-      return { ...state, checkboxes: newBoxes }
+    checkAll: (state) => {
+      state.checkboxes = state.checkboxes.map(toggleAll)
     },
   },
 })
 
 export default checkboxSlice.reducer
+export const checkboxActions = checkboxSlice.actions

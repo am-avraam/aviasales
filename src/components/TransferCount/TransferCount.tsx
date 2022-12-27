@@ -1,21 +1,15 @@
-import React, { ChangeEventHandler } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
 import uniqid from 'uniqid'
 
-import * as actions from '../../redux/Actions'
 import { Box } from '../../redux/CheckboxReducer'
-import { State } from '../../types'
+import useActions from '../../hooks/actions'
+import { useAppSelector } from '../../hooks/redux'
 
 import classes from './TransferCount.module.scss'
 
-type Properties = {
-  state: State
-  allIn: ChangeEventHandler<HTMLInputElement>
-  toggle: ChangeEventHandler<HTMLInputElement>
-}
-
-const TransferCount: React.FC<Properties> = ({ state, allIn, toggle }) => {
-  const { checkboxes } = state.checkbox
+const TransferCount: React.FC = () => {
+  const { checkboxes } = useAppSelector((state) => state.checkbox)
+  const { checkAll, toggle } = useActions()
 
   const boxesToRender = checkboxes.map((box: Box, i: number) => {
     return (
@@ -23,7 +17,7 @@ const TransferCount: React.FC<Properties> = ({ state, allIn, toggle }) => {
         <input
           type="checkbox"
           className={classes['transfer-count__checkbox']}
-          onChange={i === 0 ? allIn : toggle}
+          onChange={i === 0 ? () => checkAll() : (event) => toggle(event as React.ChangeEvent<HTMLInputElement>)}
           value={box.name}
           checked={box.checked}
         />
@@ -43,10 +37,4 @@ const TransferCount: React.FC<Properties> = ({ state, allIn, toggle }) => {
   )
 }
 
-const mapStateToProperties = (state: State) => {
-  return {
-    state,
-  }
-}
-
-export default connect(mapStateToProperties, actions)(TransferCount)
+export default TransferCount

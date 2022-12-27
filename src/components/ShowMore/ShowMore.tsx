@@ -1,20 +1,16 @@
 import React from 'react'
 import { Button, Space } from 'antd'
-import { useDispatch, connect } from 'react-redux'
 
-import { showMore } from '../../redux/Actions'
-import { State } from '../../types'
+import useActions from '../../hooks/actions'
+import { useAppSelector } from '../../hooks/redux'
 
 import classes from './ShowMore.module.scss'
 
-type ShowMoreProps = {
-  state: State
-}
+const ShowMore: React.FC = () => {
+  const { showNextFive } = useActions()
+  const { tickets } = useAppSelector((state) => state.list)
 
-const ShowMore: React.FC<ShowMoreProps> = ({ state }) => {
-  const dispatch = useDispatch()
-
-  const needVisible = state.api.tickets.length > 5
+  const needVisible = tickets.length > 5
   if (needVisible) {
     return (
       <Space direction="vertical" style={{ width: '100%' }}>
@@ -23,7 +19,7 @@ const ShowMore: React.FC<ShowMoreProps> = ({ state }) => {
           block
           style={{ height: '50px' }}
           className={classes['show-more__button']}
-          onClick={() => dispatch(showMore())}
+          onClick={() => showNextFive()}
         >
           Показать еще 5 билетов!
         </Button>
@@ -33,10 +29,4 @@ const ShowMore: React.FC<ShowMoreProps> = ({ state }) => {
   return null
 }
 
-const mapStateToProperties = (state: State) => {
-  return {
-    state,
-  }
-}
-
-export default connect(mapStateToProperties)(ShowMore)
+export default ShowMore
