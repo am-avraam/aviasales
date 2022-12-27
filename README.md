@@ -6,7 +6,7 @@ Typescript + React + Redux + RTK Query.
 
 ## Ссылка на Vercel
 
-[Click](https://aviasales-bay-iota.vercel.app/ 'Come on')
+[Click](https://aviasales-f8ryz3dqh-am-avraam.vercel.app/ 'Come on')
 
 ### Функционал
 
