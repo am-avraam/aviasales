@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { useAppSelector } from '../../hooks/redux'
 import useActions from '../../hooks/actions'
@@ -17,7 +16,7 @@ type Filter = {
 }
 
 const Filters: React.FC = () => {
-  const { filters } = useAppSelector((state) => state.filters)
+  const { filters } = useAppSelector((state) => state.list)
   const { checkFilter } = useActions()
 
   const filtersMap = filters.map((filter: Filter, index: number) => {

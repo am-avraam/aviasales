@@ -5,12 +5,14 @@ import { filterList } from '../services/SortList'
 import { TicketTypes } from '../models/ITicket'
 import { ticketsAPI } from '../services/ListApi'
 
-import { filterSlice } from './FilterReducer'
-
-console.log(filterSlice)
 interface Action {
   type: string
   payload: React.ChangeEvent<HTMLInputElement>
+}
+
+export interface Filter {
+  name: string
+  checked: boolean
 }
 
 export type ListState = {
@@ -20,6 +22,7 @@ export type ListState = {
   tickets: TicketTypes[]
   searchId: string
   enough: boolean
+  filters: Filter[]
 }
 
 const initialState = {
@@ -29,6 +32,11 @@ const initialState = {
   tickets: [],
   enough: false,
   searchId: '',
+  filters: [
+    { name: 'Самый дешевый', checked: true },
+    { name: 'Самый быстрый', checked: false },
+    { name: 'Оптимальный', checked: false },
+  ],
 } as ListState
 
 export const appToolsSlice = createSlice({
@@ -38,15 +46,24 @@ export const appToolsSlice = createSlice({
     showNextFive: (state) => {
       state.pagination += 5
     },
+    checkFilter: (state: ListState, action: Action) => {
+      state.filters = state.filters.map((element: Filter) => {
+        if (element.name === action.payload.target.value) {
+          const newElement = { ...element, checked: !element.checked }
+          return newElement
+        }
+        return { ...element, checked: false }
+      })
+      state.tickets = filterList(action.payload.target.value, state.tickets)
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(filterSlice.actions.checkFilter, (state, action: Action) => {
-      state.tickets = filterList(action.payload.target.value, state.tickets)
-    })
     builder.addMatcher(ticketsAPI.endpoints.getTicketList.matchFulfilled, (state, { payload: result }) => {
       state.searchId = state.searchId || result[0]
-      state.tickets = [...state.tickets, ...result[1].tickets].sort((a, b) => a.price - b.price)
-      // filterSlice.actions.checkFilter()
+      state.tickets = [...state.tickets, ...result[1].tickets]
+      if (state.filters[0].checked) state.tickets.sort((a, b) => a.price - b.price)
+      // для лучшей точности, но большей трудоемкости ↓
+      // state.tickets = filterList(state.filters.find((el) => el.checked).name, state.tickets)
       state.enough = result[1].stop
     })
   },

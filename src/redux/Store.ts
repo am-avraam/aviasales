@@ -4,14 +4,12 @@ import { ticketsAPI } from '../services/ListApi'
 import { store } from '..'
 
 import checkboxReducer from './CheckboxReducer'
-import filterReducer from './FilterReducer'
 import appToolsReducer from './AppReducer'
 
 export const setupStore = () => {
   return configureStore({
     reducer: {
       checkbox: checkboxReducer,
-      filters: filterReducer,
       list: appToolsReducer,
 
       [ticketsAPI.reducerPath]: ticketsAPI.reducer,
